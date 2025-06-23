@@ -171,4 +171,28 @@ public class BoardController {
 		}
 	}
 
+	/**
+	 * 탈퇴한 유저의 모든 글을 unknown으로 대체
+	 */
+	public void replacePostWithUnknown(String unknown, String userId) {
+		try {
+			writeRepository.replaceUserWithUnknown(unknown, userId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 탈퇴한 유저의 모든 댓글을 unknown으로 대체
+	 */
+	public void replaceCommentWithUnknown(String unknown, String userId) {
+		try {
+			commentsRepository.replaceUserWithUnknown(unknown, userId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

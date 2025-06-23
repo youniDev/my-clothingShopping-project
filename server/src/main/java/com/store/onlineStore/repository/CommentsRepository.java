@@ -79,4 +79,18 @@ public class CommentsRepository {
 
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CommentResponseDto.class), postId);
 	}
+
+	/**
+	 * 탈퇴한 사용자의 글 id -> unknown으로 변경
+	 *
+	 * @param userId 탈퇴한 사용자 id
+	 */
+	public void replaceUserWithUnknown(String unknown, String userId) {
+		sql = "UPDATE comments\n"
+				+ "SET comment_user = ?\n"
+				+ "WHERE comment_user = ?";
+
+		jdbcTemplate.update(sql, unknown, userId);
+	}
+}
 }

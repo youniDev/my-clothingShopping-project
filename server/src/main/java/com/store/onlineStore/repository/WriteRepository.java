@@ -74,4 +74,34 @@ public class WriteRepository {
 		jdbcTemplate.update(sql, writeId);
 	}
 
+
+	/**
+	 * 특정 카테고리에 속한 글 조회
+	 *
+	 * @param category 조회할 글의 카테고리
+	 */
+	public List<PostResponseDto> findPostByCategory(String category) {
+		sql = "SELECT \n"
+				+ "wp.id AS postId, wp.user_id AS userId, wp.title, wp.content, wp.image,\n "
+				+ "DATE_FORMAT(wp.create_at, '%Y/%m/%d') AS createDate,\n"
+				+ "DATE_FORMAT(wp.update_at, '%Y/%m/%d') AS updateDate\n"
+				+ "FROM write_post wp\n"
+				+ "JOIN board_category bc ON bc.id = wp.category\n"
+				+ "WHERE bc.name = ?";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PostResponseDto.class), category);
+	}
+
+	/**
+	 * 탈퇴한 유저의 글을 삭제하지 않고, id를 unknown으로 대체
+	 * @param unknown	탈퇴한 유저의 대체 id
+	 * @param userId	탈퇴한 유저
+	 */
+	public void replaceUserWithUnknown(String unknown, String userId) {
+		sql = "UPDATE write_post\n"
+				+ "SET user_id = ?\n"
+				+ "WHERE user_id = ?";
+
+		jdbcTemplate.update(sql, unknown, userId);
+	}
 }
