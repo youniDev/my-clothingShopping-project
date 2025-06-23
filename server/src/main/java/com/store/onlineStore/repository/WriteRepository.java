@@ -48,4 +48,19 @@ public class WriteRepository {
 		jdbcTemplate.update(sql, userId, post.getTitle(), post.getContent(), post.getCategory(), post.getImage());
 	}
 
+	/**
+	 * 등록된 모든 글 조회
+	 */
+	public List<PostResponseDto> findAll() {
+		sql = "SELECT \n"
+				+ "wp.id AS postId, wp.user_id AS userId, wp.title, wp.content, wp.image,\n "
+				+ "DATE_FORMAT(wp.create_at, '%Y/%m/%d') AS createDate,\n"
+				+ "DATE_FORMAT(wp.update_at, '%Y/%m/%d') AS updateDate,\n"
+				+ "bc.name AS category\n"
+				+ "FROM write_post wp\n"
+				+ "JOIN board_category bc ON bc.id = wp.category;";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PostResponseDto.class));
+	}
+
 }

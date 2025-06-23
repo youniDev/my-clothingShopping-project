@@ -118,4 +118,20 @@ public class BoardController {
 		}
 	}
 
+	/**
+	 * 게시판에 등록된 모든 글을 조회
+	 *
+	 */
+	@GetMapping("/fetch/post")
+	public ResponseEntity<?> getPost() {
+		try {
+			List<PostResponseDto> posts = writeRepository.findAll();
+
+			return ResponseEntity.status(HttpStatus.OK).body(posts);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+		}
+	}
+
 }
