@@ -45,4 +45,21 @@ public class CommentsRepository {
 			throw new RuntimeException("Failed to insert comment", e);
 		}
 	}
+g
+	/**
+	 * 댓글 삭제
+	 *
+	 * @param commentId 삭제할 댓글의 ID를 나타내는 문자열
+	 * @throws RuntimeException 댓글 삭제에 실패한 경우
+	 */
+	public void deleteCommentById(String commentId) {
+		sql = "DELETE FROM comments WHERE id = ?";
+
+		try {
+			jdbcTemplate.update(sql, commentId);
+		} catch (Exception e) {
+			log.info(e.toString());
+			throw new RuntimeException("Failed to delete comment.", e);
+		}
+	}
 }

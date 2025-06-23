@@ -101,4 +101,21 @@ public class BoardController {
 		}
 	}
 
+	/**
+	 * 댓글 삭제
+	 *
+	 * @param commentId 삭제할 댓글의 ID를 나타내는 문자열
+	 */
+	@PostMapping("/delete/comments")
+	public ResponseEntity<?> deleteComments(@RequestBody String commentId) {
+		try {
+			commentsRepository.deleteCommentById(commentId.replaceAll("\"", ""));
+
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+		}
+	}
+
 }
