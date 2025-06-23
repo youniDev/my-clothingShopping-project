@@ -134,4 +134,23 @@ public class BoardController {
 		}
 	}
 
+	/**
+	 * 특정 카테고리에 해당하는 게시판 글을 조회
+	 *
+	 * @param category 조회할 글의 카테고리를 나타내는 문자열
+	 */
+	@PostMapping("/fetch/post/category")
+	public ResponseEntity<?> getPostByCategory(@RequestBody String category) {
+		List<PostResponseDto> posts;
+
+		try {
+			posts = writeRepository.findPostByCategory(category.replaceAll("\"", ""));	// 해당 카테고리에 있는 글 조회
+			
+			return ResponseEntity.status(HttpStatus.OK).body(posts);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+		}
+	}
+
 }
