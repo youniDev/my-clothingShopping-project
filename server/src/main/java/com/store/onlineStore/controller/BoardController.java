@@ -62,4 +62,22 @@ public class BoardController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
 		}
 	}
+
+	/**
+	 * 글 삭제
+	 *
+	 * @param writeId 삭제할 글의 ID를 나타내는 문자열
+	 */
+	@PostMapping("/delete/write")
+	public ResponseEntity<?> deleteWrite(@RequestBody String writeId) {
+		try {
+			writeRepository.deleteWriteByIdwriteId.replaceAll("\"", "")
+
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+		}
+	}
+
 }
