@@ -63,4 +63,15 @@ public class WriteRepository {
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PostResponseDto.class));
 	}
 
+	/**
+	 * 글 삭제
+	 *
+	 * @param writeId 삭제할 글의 ID를 나타내는 문자열
+	 */
+	public void deleteWriteById(String writeId) {
+		sql = "DELETE FROM write_post WHERE id = ?";
+
+		jdbcTemplate.update(sql, writeId);
+	}
+
 }
