@@ -49,6 +49,19 @@ public class WriteRepository {
 	}
 
 	/**
+	 * 글 수정
+	 *
+	 * @param post 수정할 글 정보를 담은 객체
+	 */
+	public void updateAll(PostDto post, String userId) {
+		sql = "UPDATE write_post SET (title, content, category, image)\n"
+				+ "VALUES (?, ?, ?, ?, ?)\n"
+				+ "WHERE id = ? AND user_id = ?";
+
+		jdbcTemplate.update(sql, post.getTitle(), post.getContent(), post.getCategory(), post.getImage(), post.getId(), userId);
+	}
+
+	/**
 	 * 등록된 모든 글 조회
 	 */
 	public List<PostResponseDto> findAll() {
