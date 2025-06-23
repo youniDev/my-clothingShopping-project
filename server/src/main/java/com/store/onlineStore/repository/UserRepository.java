@@ -91,5 +91,40 @@ public class UserRepository {
 
 		jdbcTemplate.update(sql, userId);
 	}
-}
+
+	/**
+	 * 소셜 로그인 회원의 정보 저장
+	 * @param user	회원 정보
+	 * @return	user id
+	 */
+	public AuthRequestDto insertUserBySocial(SocialRegistrationDto user) {
+		String SOCIAL_ADDRESS = "";
+
+		sql = "INSERT INTO user (name, birth, address, user_id, password, role) " +
+				"VALUES (?, ?, ?, ?, ?, ?)";
+
+		jdbcTemplate.update(
+				sql,
+				user.getName(),
+				user.getBirth(),
+				SOCIAL_ADDRESS,
+				user.getId(),
+				user.getPw().toString(),
+				Role.ROLE_USER.getValue()
+		);
+
+		return findUserByUserId(user.getId());
+	}
+
+	/**
+	 * 토큰 저장
+	 * @param token	해당 유저의 토큰
+	 * @param email	user id
+	 */
+	public void updateAuth(String token, String email) {
+		sql = "UPDATE user SET auth = ? WHERE user_id = ?";
+
+		jdbcTemplate.update(sql, token, email);
+	}
+
 }
