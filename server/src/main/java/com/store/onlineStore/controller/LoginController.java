@@ -158,4 +158,20 @@ public class LoginController {
 		}
 	}
 
+	/**
+	 * 마이 페이지
+	 * 	- 사용자 정보 조회
+	 * @param accessToken
+	 * @return	사용자 정보
+	 */
+	@GetMapping("/user")
+	@PreAuthorize("hasAnyRole('USER')")
+	public ResponseEntity<?> findUser(@RequestHeader("Authorization") String accessToken) {
+		String email = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+
+		RegistrationRequestDto user = userRepository.findUserByEmail(email);
+
+		return ResponseEntity.status(HttpStatus.OK).body(user);
+	}
+
 }

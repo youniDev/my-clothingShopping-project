@@ -55,4 +55,14 @@ public class UserRepository {
 
 		return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("user_id"));
 	}
+
+	/**
+	 * 소셜 로그인으로 로그인한 유저 조회
+	 * @param email	user id
+	 */
+	public RegistrationRequestDto findUserByEmail(String email) {
+		sql = "SELECT user_id, password, name, birth, address, point FROM user WHERE user_id = ? AND password IN ('NAVER', 'GOOGLE', 'KAKAO')";
+
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(RegistrationRequestDto.class), email);
+	}
 }
