@@ -120,11 +120,42 @@ public class LoginController {
 
 			return new ResponseEntity<>(new AuthResponseDto(jwt), httpHeaders, HttpStatus.OK);		// tokenDto를 이용해 response body에 추가해 리턴
 		} catch (InternalAuthenticationServiceException e) {
-			log.error(e.toString());
+			
 			return ResponseEntity.status(401).body("LOGIN_ERROR NOT_USER");
 		} catch (BadCredentialsException e) {
-			log.error(e.toString());
+
 			return ResponseEntity.status(401).body("LOGIN_ERROR BAD_CREDENTIALS");
 		}
 	}
+
+	/**
+	 * 사용자 이메일 조회 기능
+	 * 	- access token이 유효한지 확인
+	 * @param accessToken
+	 * @return	사용자 이메일
+	 */
+	@GetMapping("/user/id")
+	@PreAuthorize("hasAnyRole('USER','ADMIN')")
+	public ResponseEntity<?> findUserId(@RequestHeader("Authorization") String accessToken) {
+		try {
+			String email = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+
+			// ADMIN 권한인 경우
+			if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+					.anyMatch(r -> r.getAuthority().equals(Role.ROLE_ADMIN.getValue()))) {
+
+				return ResponseEntity.status(HttpStatus.OK).body(Role.ROLE_ADMIN.getValue());
+			}
+
+			// USER 권한인 경우
+			String foundUserId = userRepository.findUserNameByEmail(email);
+
+			return ResponseEntity.status(HttpStatus.OK).body(foundUserId);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return ResponseEntity.badRequest().body(e.toString());
+		}
+	}
+
 }
