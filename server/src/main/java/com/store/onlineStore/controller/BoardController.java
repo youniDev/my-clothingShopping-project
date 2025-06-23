@@ -32,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 	@Autowired
 	WriteRepository writeRepository;
+	@Autowired
+	CommentsRepository commentsRepository;
 
 	private final TokenProvider tokenProvider;
 
@@ -72,6 +74,25 @@ public class BoardController {
 	public ResponseEntity<?> deleteWrite(@RequestBody String writeId) {
 		try {
 			writeRepository.deleteWriteByIdwriteId.replaceAll("\"", "")
+
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+		}
+	}
+
+
+	/**
+	 * 댓글 추가
+	 *	- 관리자일 경우에만 추가 가능
+	 * @param comment 추가할 댓글 정보를 담은 CommentRequestDto 객체
+	 */
+	@PostMapping("/add/comments")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> addComments(@RequestBody CommentRequestDto comment) {
+		try {
+			commentsRepository.insertComment(comment);
 
 			return ResponseEntity.status(HttpStatus.OK).body(true);
 		} catch (RuntimeException e) {
