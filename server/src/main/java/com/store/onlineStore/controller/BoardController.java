@@ -153,4 +153,22 @@ public class BoardController {
 		}
 	}
 
+	/**
+	 * 특정 게시물에 해당하는 댓글 조회
+	 *
+	 * @param postId 조회할 댓글이 속한 게시물의 ID를 나타내는 문자열
+	 * @return 특정 게시물에 해당하는 댓글 목록을 담은 ResponseEntity
+	 */
+	@PostMapping("/fetch/comments")
+	public ResponseEntity<?> getPostByPostId(@RequestBody String postId) {
+		try {
+			List<CommentResponseDto> comments = commentsRepository.findPostById(postId.replaceAll("\"", ""));
+
+			return ResponseEntity.status(HttpStatus.OK).body(comments);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
+		}
+	}
+
 }

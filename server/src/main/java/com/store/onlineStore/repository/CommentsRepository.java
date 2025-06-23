@@ -45,7 +45,7 @@ public class CommentsRepository {
 			throw new RuntimeException("Failed to insert comment", e);
 		}
 	}
-g
+
 	/**
 	 * 댓글 삭제
 	 *
@@ -61,5 +61,22 @@ g
 			log.info(e.toString());
 			throw new RuntimeException("Failed to delete comment.", e);
 		}
+	}
+
+	/**
+	 * 글 ID를 기준으로 해당 글의 댓글 조회
+	 *
+	 * @param postId 조회할 글의 ID를 나타내는 문자열
+	 * @return 해당 글에 대한 댓글 목록을 담은 List<CommentResponseDto> 객체
+	 * @throws RuntimeException 댓글 조회에 실패한 경우
+	 */
+	public List<CommentResponseDto> findPostById(String postId) {
+		sql = "SELECT id AS commentId, post_id AS postId, parent_comment_id AS parentCommentId, comment_user AS commentUserId, content, image, "
+				+ "DATE_FORMAT(create_at, '%Y/%m/%d') AS createDate, "
+				+ "DATE_FORMAT(update_at, '%Y/%m/%d') AS updateDate"
+				+ " FROM comments WHERE post_id = ?";
+
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CommentResponseDto.class), postId);
 	}
 }
