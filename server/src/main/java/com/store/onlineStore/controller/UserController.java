@@ -61,6 +61,26 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * 사용자의 위시리스트 조회
+	 *
+	 */
+	@GetMapping("/fetch/wishList/userId")
+	public ResponseEntity<?> fetchWishListByUserId(@RequestHeader("Authorization") String accessToken) {
+		try {
+			String userId = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+
+			List<ProductResponseDto> products = wishListRepository.findWishListByUserId(userId);
+
+			productController.changedProductThumbnails(products);	// 썸네일 경로 수정
+
+			return ResponseEntity.status(HttpStatus.OK).body(products);
+		} catch (RuntimeException | IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+	}
+
 
 
 	/**

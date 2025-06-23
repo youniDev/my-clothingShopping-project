@@ -27,8 +27,7 @@ public class WishListRepository {
 	/**
 	 * 위시리스트에 제품 추가
 	 *
-	 * @param wishlist 위시리스트에 추가할 제품 정보를 담은 WishListRequestDto 객체
-	 * @throws DuplicateKeyException 중복된 키가 발생한 경우
+	 * @param wishlist 위시리스트에 추가할 제품 정보를 담은 객체
 	 */
 	public void insertWishList(WishListRequestDto wishlist) {
 		sql = "INSERT INTO user_wish_list (product_id, user_id) " +
@@ -45,5 +44,19 @@ public class WishListRepository {
 		sql = "DELETE FROM user_wish_list WHERE user_id = ?";
 
 		jdbcTemplate.update(sql, userId);
+	}
+
+	/**
+	 * 위시리스트에서 제품 목록 조회
+	 *
+	 * @param userId 사용자 ID를 나타내는 문자열
+	 */
+	public List<ProductResponseDto> findWishListByUserId(String userId) {
+		sql = "SELECT p.*\n"
+				+ "FROM product p\n"
+				+ "JOIN user_wish_list w ON p.id = w.product_id\n"
+				+ "WHERE w.user_id = ?";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), userId);
 	}
 }
