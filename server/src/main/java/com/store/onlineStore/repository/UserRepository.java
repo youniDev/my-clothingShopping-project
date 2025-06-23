@@ -65,4 +65,20 @@ public class UserRepository {
 
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(RegistrationRequestDto.class), email);
 	}
+
+	/**
+	 * 회원 정보 수정
+	 * @param user	회원 정보
+	 */
+	public void updateUser(RegistrationDto user) {
+		sql = "UPDATE user SET name=?, address=?, birth=? WHERE user_id = ?";
+
+		jdbcTemplate.update(
+				sql,
+				user.getName(),
+				user.getAddress(),
+				user.getBirth(),
+				user.getId()
+		);
+	}
 }

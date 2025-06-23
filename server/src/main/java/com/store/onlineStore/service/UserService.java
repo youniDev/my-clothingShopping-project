@@ -53,4 +53,23 @@ public class UserService {
 		return ResponseEntity.ok(verificationCode);
 	}
 
+	// address 분리
+	public void compareAddress(UserResponseDto user) {
+		//	사용자가 주소 입력을 하지 않았을 경우
+		if (user.getAddress().isEmpty() || user.getAddress().equals("")) {
+			return ;
+		}
+		StringTokenizer tokenizer = new StringTokenizer(user.getAddress(), "/");
+
+		user.setAddress(tokenizer.nextToken());
+		user.setDetail(tokenizer.nextToken());
+	}
+
+	public RegistrationDto replaceAddress(RegistrationDto user) {
+		if (user.getAddress().contains("undefined")) {
+			user.setAddress("");
+		}
+
+		return user;
+	}
 }

@@ -174,4 +174,17 @@ public class LoginController {
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
 
+	// 정보 수정
+	@PutMapping("/update/user")
+	public boolean updateUserInfo(@RequestBody RegistrationDto registration) {
+		try {
+			userService.replaceAddress(registration);
+			userRepository.updateUser(registration);
+
+			return true;
+		} catch (RuntimeException e) {
+
+			return false;
+		}
+	}
 }
