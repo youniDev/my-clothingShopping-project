@@ -41,6 +41,27 @@ public class UserController {
 
 	private final TokenProvider tokenProvider;
 
+	/**
+	 * 사용자의 위시리스트에 제품 추가
+	 *
+	 * @param wishList 위시리스트에 추가할 제품 정보를 담은 WishListRequestDto 객체
+	 */
+	@PostMapping("/add/wishList")
+	public ResponseEntity<?> addWishListByUserId(@RequestBody WishListRequestDto wishList, @RequestHeader("Authorization") String accessToken) {
+		try {
+			String userId = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+			wishList.setUserId(userId);
+
+			wishListRepository.insertWishList(wishList);
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (DuplicateKeyException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("duplicate entry");	// 중복일 경우
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+	}
+
+
 
 	/**
 	 * 회원 탈퇴 시, 장바구니 삭제
