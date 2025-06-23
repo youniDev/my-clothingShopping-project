@@ -59,4 +59,16 @@ public class WishListRepository {
 
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), userId);
 	}
+
+	/**
+	 * 위시리스트에서 제품 삭제
+	 *
+	 * @param wishlist 삭제할 제품 정보를 담은 WishListRequestDto 객체
+	 */
+	public void deleteWishListByUserId(WishListRequestDto wishlist) {
+		sql = "DELETE FROM user_wish_list WHERE product_id = ? AND user_id = ?";
+
+		jdbcTemplate.update(sql, wishlist.getProductId(), wishlist.getUserId());
+	}
+
 }

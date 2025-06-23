@@ -81,6 +81,24 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * 사용자의 위시리스트에서 제품 삭제
+	 *
+	 * @param wishList 삭제할 제품 정보를 담은 WishListRequestDto 객체
+	 */
+	@PostMapping("/delete/wishList")
+	public ResponseEntity<?> deleteWishListByUserId(@RequestBody WishListRequestDto wishList, @RequestHeader("Authorization") String accessToken) {
+		try {
+			String userId = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+			wishList.setUserId(userId);
+
+			wishListRepository.deleteWishListByUserId(wishList);
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+	}
+
 
 
 	/**
