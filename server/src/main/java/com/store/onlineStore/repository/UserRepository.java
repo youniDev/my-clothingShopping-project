@@ -81,4 +81,15 @@ public class UserRepository {
 				user.getId()
 		);
 	}
+
+	/**
+	 * 유저 정보 삭제
+	 * @param userId	user id
+	 */
+	public void deleteUser(String userId) {
+		sql = "DELETE FROM user WHERE user_id = ?";
+
+		jdbcTemplate.update(sql, userId);
+	}
+}
 }
