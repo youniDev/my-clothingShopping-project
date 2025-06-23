@@ -94,4 +94,37 @@ public class LoginController {
 	public ResponseEntity<?> receivePhoneForVerification(@RequestBody String phone) {
 		return userService.sendVerificationCodeByPhone(phone);
 	}
+
+	/**
+	 * 로그인
+	 * @param loginRequest	로그인을 위한 정보
+	 * return	jwt 토큰 반환
+	 */
+	@PostMapping("/signin")
+	public ResponseEntity<?> signin(@RequestBody Map<String, String> loginRequest) {
+		String email = loginRequest.get("email");
+		String pw = loginRequest.get("password");
+
+		try {
+			UsernamePasswordAuthenticationToken authenticationToken =
+					new UsernamePasswordAuthenticationToken(email, pw);	// 로그인 폼에서 제출되는 id, pw를 통한 인증을 처리하는 filter
+
+			// authenticate 메소드가 실행이 될 때 CustomUserDetailsService class의 loadUserByUsername 메소드가 실행
+			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);	// 해당 객체를 SecurityContextHolder에 저장하고
+			String jwt = tokenProvider.createToken(authentication);		// authentication 객체를 createToken 메소드를 통해서 JWT Token을 생성
+
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);		// response header에 jwt token에 넣어줌
+
+			return new ResponseEntity<>(new AuthResponseDto(jwt), httpHeaders, HttpStatus.OK);		// tokenDto를 이용해 response body에 추가해 리턴
+		} catch (InternalAuthenticationServiceException e) {
+			log.error(e.toString());
+			return ResponseEntity.status(401).body("LOGIN_ERROR NOT_USER");
+		} catch (BadCredentialsException e) {
+			log.error(e.toString());
+			return ResponseEntity.status(401).body("LOGIN_ERROR BAD_CREDENTIALS");
+		}
+	}
 }
