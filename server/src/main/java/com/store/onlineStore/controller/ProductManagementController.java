@@ -1,0 +1,117 @@
+package com.store.onlineStore.controller;
+
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.store.onlineStore.dto.CartRequestDto;
+import com.store.onlineStore.dto.PaginationResponseDto;
+import com.store.onlineStore.dto.ProductRequestDto;
+import com.store.onlineStore.dto.ProductResponseDto;
+import com.store.onlineStore.oauth.domain.image.Image;
+import com.store.onlineStore.repository.BestProductRepository;
+import com.store.onlineStore.repository.ProductRepository;
+import com.store.onlineStore.repository.PurchaseRepository;
+import com.store.onlineStore.service.FileService;
+import com.store.onlineStore.service.ImageService;
+import com.store.onlineStore.service.ProductManagementService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+public class ProductManagementController {
+	@Autowired
+	ProductRepository productRepository;
+	@Autowired
+	ProductManagementService productManagementService;
+	@Autowired
+	BestProductRepository bestProductRepository;
+
+	@Autowired
+	ImageService imageService;
+	@Autowired
+	FileService fileService;
+	@Autowired
+	PurchaseRepository purchaseRepository;
+	private final int PRODUCT_PAGE = 8;
+
+	/**
+	 * 제품 등록 및 수정
+	 *
+	 * @param product 등록할 제품 정보를 담은 ProductRequestDto 객체
+	 */
+	@PostMapping("/addProduct")
+	public ResponseEntity<?> addProductInfo(@RequestBody ProductRequestDto product) {
+		try {
+			// 새로 등록하는 제품
+			if (product.getId() == null) {
+				String category = productRepository.findProductIdByCategory(product.getSubCategory()); // category id 찾기
+				product.setId(productManagementService.generateProductId(category)); // category id + 랜덤식별숫자를 합쳐 product id 생성
+
+				productRepository.insertProduct(product, imageService.getPathAsJson(product.getImages()));
+
+				return ResponseEntity.status(HttpStatus.OK).body(product.getId());
+			}
+			// 제품 정보를 수정하는 경우
+
+			// 이미지를 등록하지 않았을 경우
+			if (product.getImages() == null) {
+				productRepository.updateAll(product, null);
+
+				return ResponseEntity.status(HttpStatus.OK).body(true);
+			}
+
+			// 이미지를 새로 추가하지 않고, 삭제만 했을 경우, 기존에 db에 저장되어 있는 이미지 목록과 비교해 로컬에 있는 이미지 삭제
+			String[] existing = productRepository.findProductImagesById(product.getId());	// 변경 전 이미지
+			String[] delete = imageService.getImagesName(existing, product.getImages());
+			fileService.deleteImages(delete);
+
+			String[] names = imageService.getImagesNamesForExisting(product.getImages());
+
+			productRepository.updateAll(product, imageService.getPathAsJson(names));
+
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+
+	}
+
+	// 이미지 로컬 파일에 저장 후 이름 반환
+	// files or names가 null일 경우 null로 받기 위해 required = false 추가
+	@PostMapping("/addImages/ProductId")
+	public ResponseEntity<?> uploadFile(@RequestParam(value = "files", required = false) MultipartFile[] files,  @RequestParam(value = "imageNames", required = false) String[] imageNames) {
+		try {
+			Image[] images = imageService.getImagesName(files, imageNames);
+			String[] names = imageService.getImagesName(images);
+			fileService.saveImages(files, imageService.getImagesPath(images));
+
+			return ResponseEntity.status(HttpStatus.OK).body(names);
+		}  catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+	}
+
+
+}
