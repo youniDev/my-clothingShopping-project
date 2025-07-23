@@ -125,4 +125,16 @@ public class ProductRepository {
 		jdbcTemplate.update(sql, productId);
 	}
 
+	/**
+	 * 제품 세부 정보 조회
+	 */
+	public ProductResponseDto findAllById(String id) {
+		sql = "SELECT * FROM product WHERE id = ?";
+
+		List<ProductResponseDto> resultList = jdbcTemplate.query(
+				sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), id);
+
+		return resultList.isEmpty() ? null : resultList.get(0);
+	}
+
 }

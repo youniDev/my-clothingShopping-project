@@ -135,4 +135,17 @@ public class ProductManagementController {
 		}
 
 	}
+
+
+	/**
+	 * 제품 정보 수정을 위해 제품 세부 정보 조회
+	 *
+	 * @param id 수정할 제품의 ID
+	 */
+	@PostMapping("/showProductDetail/admin")
+	public ResponseEntity<?> showProductDetailByProductId(@RequestBody String id) {
+		id = id.replaceAll("\"", "");
+
+		return ResponseEntity.status(HttpStatus.OK).body(productRepository.findAllById(id));
+	}
 }
