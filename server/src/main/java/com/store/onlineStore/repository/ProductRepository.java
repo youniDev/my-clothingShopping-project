@@ -202,4 +202,115 @@ public class ProductRepository {
 		return new PaginationResponseDto(products, nextCursor, totalPage);
 	}
 
+	/**
+	 * 신상품 순으로 정렬 후 반환
+	 */
+	public PaginationResponseDto findNewestProductByCategory(String category, String cursor, Long totalPage) {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, " +
+				"DATE_FORMAT(p.created_at, '%Y%m%d%H%i%s') AS createDate " +
+				"FROM product p " +
+				"LEFT JOIN product_category c ON p.category = c.category_name " +
+				"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) " +
+				"AND p.image NOT LIKE 'Nothing%' " +
+				"AND (? IS NULL OR p.created_at < ?) " +  // 신상품 순으로
+				"ORDER BY p.created_at DESC " +
+				"LIMIT " + PRODUCT_PAGE;
+		Object[] params = new Object[] { category, category, cursor, cursor };
+
+		List<ProductResponseDto> products = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), params);
+		String nextCursor = products.isEmpty() ? null : products.get(products.size() - 1).getCreateDate();
+
+		return new PaginationResponseDto(products, nextCursor, totalPage);
+	}
+
+	/**
+	 * 사전 순으로 정렬
+	 */
+	public PaginationResponseDto findDictionaryProductByCategory(String category, String cursor, Long totalPage) {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, " +
+				"DATE_FORMAT(p.created_at, '%Y%m%d') AS createDate " +
+				"FROM product p " +
+				"LEFT JOIN product_category c ON p.category = c.category_name " +
+				"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) " +
+				"AND p.image NOT LIKE 'Nothing%' " +
+				"AND (? IS NULL OR p.name > ?) " +  // 사전 순
+				"ORDER BY p.name ASC " +
+				"LIMIT " + PRODUCT_PAGE;
+
+		Object[] params = new Object[] { category, category, cursor, cursor };
+
+		List<ProductResponseDto> products = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), params);
+		String nextCursor = products.isEmpty() ? null : products.get(products.size() - 1).getName();
+
+		return new PaginationResponseDto(products, nextCursor, totalPage);
+	}
+
+	/**
+	 * 낮은 가격순으로 정렬
+	 */
+	public PaginationResponseDto findCheaperProductByCategory(String category, String cursor, Long totalPage) {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, " +
+				"DATE_FORMAT(p.created_at, '%Y%m%d') AS createDate " +
+				"FROM product p " +
+				"LEFT JOIN product_category c ON p.category = c.category_name " +
+				"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) " +
+				"AND p.image NOT LIKE 'Nothing%' " +
+				"AND (? IS NULL OR p.price > ?) " +
+				"ORDER BY p.price ASC, p.name ASC " +  // 가격 싼 순으로 정렬, 같을 경우 이름 순으로
+				"LIMIT " + PRODUCT_PAGE;
+
+		Object[] params = new Object[] { category, category, cursor, cursor };
+
+		List<ProductResponseDto> products = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), params);
+		String nextCursor = String.valueOf(products.isEmpty() ? null : products.get(products.size() - 1).getPrice());
+
+		return new PaginationResponseDto(products, nextCursor, totalPage);
+	}
+
+	/**
+	 * 높은 가격순으로 정렬
+	 */
+	public PaginationResponseDto findExpensiveProductByCategory(String category, String cursor, Long totalPage) {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, " +
+				"DATE_FORMAT(p.created_at, '%Y%m%d') AS createDate " +
+				"FROM product p " +
+				"LEFT JOIN product_category c ON p.category = c.category_name " +
+				"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) " +
+				"AND p.image NOT LIKE 'Nothing%' " +
+				"AND (? IS NULL OR p.price < ?) " +
+				"ORDER BY p.price DESC, p.name ASC " +  // 가격 비싼 순으로 정렬, 같을 경우 이름 순으로
+				"LIMIT " + PRODUCT_PAGE;
+
+		Object[] params = new Object[] { category, category, cursor, cursor };
+
+		List<ProductResponseDto> products = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), params);
+		String nextCursor = String.valueOf(products.isEmpty() ? null : products.get(products.size() - 1).getPrice());
+
+		return new PaginationResponseDto(products, nextCursor, totalPage);
+	}
+
+	/**
+	 * 인기순으로 정렬
+	 */
+	public PaginationResponseDto findBestProductByCategory(String category, String cursor, Long totalPage) {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, "
+				+ "DATE_FORMAT(p.created_at, '%Y%m%d%H%i%s') AS createDate, "
+				+ "COALESCE(SUM(s.purchaseQuantity), 0) AS total_sales "
+				+ "FROM product p "
+				+ "LEFT JOIN product_category c ON p.category = c.category_name "
+				+ "LEFT JOIN sales s ON p.id = s.product_id "
+				+ "WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) "
+				+ "AND (? IS NULL OR p.created_at > ?) "
+				+ "GROUP BY p.id "
+				+ "ORDER BY total_sales DESC, p.created_at ASC "
+				+ "LIMIT " + PRODUCT_PAGE;
+
+		Object[] params = new Object[] { category, category, cursor, cursor };
+
+		List<ProductResponseDto> products = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), params);
+		String nextCursor = products.isEmpty() ? null : products.get(products.size() - 1).getCreateDate();
+
+		return new PaginationResponseDto(products, nextCursor, totalPage);
+	}
+
 }

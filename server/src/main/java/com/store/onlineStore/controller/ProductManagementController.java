@@ -221,12 +221,18 @@ public class ProductManagementController {
 			throw new RuntimeException(e);
 		}
 	}
-
-	/**
-	* 커서 기반 페이지네이션
+	/***
+	 * 커서 기반 페이지네이션
+	 * @param category	특정 카테고리
+	 * @param cursor 현재 커서
+	 * @param totalPage 현재 페이지
+	 * @return
 	 */
 	@GetMapping("/showProduct/category/page")
-	public ResponseEntity<?> getProductsByCategory(@RequestParam String category, @RequestParam(required = false) String cursor, @RequestParam(required = false) Long totalPage) {
+	public ResponseEntity<?> getProductsByCategory(
+				@RequestParam String category, 
+				@RequestParam(required = false) String cursor, 
+				@RequestParam(required = false) Long totalPage) {
 		try {
 			PaginationResponseDto response = productRepository.findProductByCategory(category, cursor, totalPage);
 			// 마지막 페이지일 경우
@@ -242,4 +248,59 @@ public class ProductManagementController {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/***
+	 * 특정 카테고리에서 정렬
+	 * @param sortType	정렬 타입
+	 * @param category	특정 카테고리
+	 * @param cursor 현재 커서
+	 * @param totalPage 현재 페이지
+	 * @return
+	 */
+	@GetMapping("/sort/product/{sortType}")
+	public ResponseEntity<?> getSortedProductsByCategory(
+			@PathVariable String sortType,
+			@RequestParam String category,
+			@RequestParam(required = false) String cursor,
+			@RequestParam(required = false) Long totalPage) {
+		try {
+			PaginationResponseDto response = fetchSortedProducts(sortType, category, cursor, totalPage);
+			if (isLastPage(response.getNextCursor())) {
+				return ResponseEntity.ok(null);
+			}
+			changedProductThumbnails(response);
+
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void changedProductThumbnails(PaginationResponseDto response) throws IOException {
+		imageService.setProductThumbnail(response.getProducts());
+	}
+	public boolean isLastPage(String nextCursor) {
+		if (nextCursor == null) return true;
+
+		return false;
+	}
+
+	private PaginationResponseDto fetchSortedProducts(String sortType, String category, String cursor, Long totalPage) {
+		switch (sortType.toLowerCase()) {
+			case "new":
+				return productRepository.findNewestProductByCategory(category, cursor, totalPage);		// 신제품순
+			case "dictionary":	
+				return productRepository.findDictionaryProductByCategory(category, cursor, totalPage);	// 사전순
+			case "cheaper":
+				return productRepository.findCheaperProductByCategory(category, cursor, totalPage);	// 낮은 가격순
+			case "expensive":
+				return productRepository.findExpensiveProductByCategory(category, cursor, totalPage);	// 높은 가격순
+			case "best":
+				return productRepository.findBestProductByCategory(category, cursor, totalPage);		// 인기순
+			default:
+				throw new IllegalArgumentException("Invalid sort type: " + sortType);
+		}
+	}
+
 }
