@@ -45,4 +45,19 @@ public class FileService {
 
 		Directory directory = new Directory(files, paths);
 	}
+
+	// 변경 전 이미지와 변경 후 이미지의 변동이 있을 때 변동된 이미지 삭제
+	public void deleteImages(String[] original, String modified) throws IOException {
+		ArrayList<String> imagesToDelete = new ArrayList<>();
+		ArrayList<String> modifiedImages = new ArrayList<>(Arrays.asList(modified));
+
+		for (String image : original) {
+			if (!modifiedImages.contains(image)) imagesToDelete.add(image);
+		}
+
+		String[] finalImagesToDelete = new String[imagesToDelete.size()];
+		finalImagesToDelete = imagesToDelete.toArray(finalImagesToDelete);
+
+		deleteImages(finalImagesToDelete);
+	}
 }

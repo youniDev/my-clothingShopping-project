@@ -113,5 +113,26 @@ public class ProductManagementController {
 		}
 	}
 
+	/**
+	 * 제품 삭제
+	 *
+	 * @param productId 삭제할 제품의 ID를 담은 문자열 리스트
+	 * @return 제품 삭제가 성공하면 true를 반환
+	 */
+	@PostMapping("/deleteProduct")
+	public ResponseEntity<?> deleteProduct(@RequestBody List<String> productId) {
+		try {
+			for (String id : productId) {
+				String[] names = productRepository.findProductImagesById(id);
+				fileService.deleteImages(names);	// 파일에서 이미지 제거
+				productRepository.deleteProductById(id);		// db에서 해당 product 정보 제거
+			}
 
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
 }

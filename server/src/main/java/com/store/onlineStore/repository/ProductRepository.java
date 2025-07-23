@@ -115,5 +115,14 @@ public class ProductRepository {
 		return jdbcTemplate.queryForObject(sql, String[].class, id);
 	}
 
+	/**
+	 * 제품 삭제
+	 * @param productId	제품 id
+	 */
+	public void deleteProductById(String productId) {
+		sql = "DELETE FROM product WHERE id = ?";
+
+		jdbcTemplate.update(sql, productId);
+	}
 
 }
