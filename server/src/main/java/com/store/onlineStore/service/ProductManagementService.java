@@ -95,4 +95,10 @@ public class ProductManagementService {
 
 		purchaseRepository.deleteCartBySales(purchaseId, purchases.get(0).getUserId());	// 장바구니에 있는 구매한 제품 정보 제거
 	}
+
+	// 제품 판매량 업데이트
+	@Transactional
+	public void updateProductSalesSummary() {
+		productSalesSummaryRepository.updateProductSalesSummary();
+	}
 }
