@@ -154,4 +154,45 @@ public class PurchaseController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(purchaseProduct);
 	}
+
+	/**
+	 * 구매 전, 회원의 주소를 조회
+	 *
+	 * @param accessToken 사용자 이메일을 당아놓은 token
+	 * @return 사용자의 주소 정보를 담은 ResponseEntity
+	 */
+	@GetMapping("/fetch/purchase/user")
+	public ResponseEntity<?> fetchPurchaseUserByUserid(@RequestHeader("Authorization") String accessToken) {
+		String email = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+
+		UserResponseDto user = userRepository.findAddressByUserId(email);
+		userService.compareAddress(user);	// 주소 수정
+
+		return ResponseEntity.status(HttpStatus.OK).body(user);
+	}
+
+	/**
+	 * 탈퇴한 회원의 장바구니 삭제
+	 * @param userId	탈퇴한 회원의 id
+	 */
+	public void deleteCart(String userId) {
+		try {
+			purchaseRepository.deleteCartByUserId(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void replacePurchaseOrderWithUnknown(String unknown, String userId) {
+		try {
+			purchaseRepository.replaceUserWithUnknown(unknown, userId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private boolean isNot(boolean result) {
+		return !result;
+	}
 }

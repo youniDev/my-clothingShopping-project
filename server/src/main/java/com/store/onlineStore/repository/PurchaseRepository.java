@@ -237,4 +237,28 @@ public class PurchaseRepository {
 
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(OrderResponseDto.class), orderId);
 	}
+
+	/**
+	 * 유저가 탈퇴할 경우, 
+	 * @param unknown - 대체 유저 id
+	 * @param userId	탈퇴할 유저
+	 */
+	public void replaceUserWithUnknown(String unknown, String userId) {
+		sql = "UPDATE purchase_order\n"
+				+ "SET user_id = ?\n"
+				+ "WHERE user_id = ?";
+
+		jdbcTemplate.update(sql, unknown, userId);
+	}
+
+	/**
+	 * 해당 유저의 장바구니에 있는 모든 데이터 삭제
+	 * @param userId	유저 id
+	 */
+	public void deleteCartByUserId(String userId) {
+		sql = "DELETE FROM cart WHERE user_id = ?";
+
+		jdbcTemplate.update(sql, userId);
+	}
+}
 }
