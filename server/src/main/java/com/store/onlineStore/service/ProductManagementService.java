@@ -76,5 +76,23 @@ public class ProductManagementService {
 
 	}
 
+	// 주문 정보 저장
+	public String updatePurchaseOrder(CartRequestDto order) {
+		String orderId = generateProductId(order.getProductId());	// 주문번호 생성
 
+		purchaseRepository.insertOrder(order, orderId);		// 주문 정보와 주문 번호 저장
+
+		return orderId;
+	}
+
+	// 구매 정보 저장
+	public void updateSalesByOrderId(List<CartRequestDto> purchases, String orderId) {
+		List<String> purchaseId = new ArrayList<>();
+		for (CartRequestDto purchase : purchases) {
+			purchaseRepository.insertSales(purchase, orderId);	// 제품 id, 구매 수량 저장
+			purchaseId.add(purchase.getProductId());	// 장바구니에 있었던 제품 id 저장
+		}
+
+		purchaseRepository.deleteCartBySales(purchaseId, purchases.get(0).getUserId());	// 장바구니에 있는 구매한 제품 정보 제거
+	}
 }
