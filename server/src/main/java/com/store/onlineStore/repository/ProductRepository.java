@@ -176,4 +176,30 @@ public class ProductRepository {
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), category, category);
 	}
 
+	/**
+	 * 커서 기반 페이지네이션 (카테고리 클릭 시, 기본으로 보여지는 제품 목록 조회)
+	 * @param category	 카테고리명
+	 * @param cursor	 현재 커서
+	 * @param totalPage 현재 페이지
+	 * @return	 현재 페이지에 해당하는 제품 목록
+	 */
+	public PaginationResponseDto findProductByCategory(String category, String cursor, Long totalPage) {
+		String sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, " +
+					"DATE_FORMAT(p.created_at, '%Y%m%d') AS createDate " +
+					"FROM product p " +
+					"LEFT JOIN product_category c ON p.category = c.category_name " +
+					"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) " +
+					"AND p.image NOT LIKE 'Nothing%' " +
+					"AND (? IS NULL OR p.id > ?) " +  // 커서 조건
+					"ORDER BY p.id ASC " +
+					"LIMIT " + PRODUCT_PAGE;  // 페이지당 데이터 수
+		Object[] params = new Object[] { category, category, cursor, cursor };
+
+		List<ProductResponseDto> products = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), params);
+
+		String nextCursor = products.isEmpty() ? null : products.get(products.size() - 1).getId();
+
+		return new PaginationResponseDto(products, nextCursor, totalPage);
+	}
+
 }

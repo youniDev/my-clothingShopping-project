@@ -146,4 +146,16 @@ public class ImageService {
 		return path;
 	}
 
+	// 카테고리별 제품들의 썸네일들 불러오기
+	public void setProductThumbnail(List<ProductResponseDto> products) throws IOException {
+		for (ProductResponseDto product : products) {
+			setProductThumbnail(product);
+		}
+	}
+
+	// 해당 제품의 썸네일만 불러오기
+	public void setProductThumbnail(ProductResponseDto product) throws IOException {
+		product.setThumbnail(getImagesForSendImage(product.getThumbnail(), "clientPath"));
+	}
+
 }

@@ -221,4 +221,25 @@ public class ProductManagementController {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	* 커서 기반 페이지네이션
+	 */
+	@GetMapping("/showProduct/category/page")
+	public ResponseEntity<?> getProductsByCategory(@RequestParam String category, @RequestParam(required = false) String cursor, @RequestParam(required = false) Long totalPage) {
+		try {
+			PaginationResponseDto response = productRepository.findProductByCategory(category, cursor, totalPage);
+			// 마지막 페이지일 경우
+			if (response.getNextCursor() == null) {
+				return ResponseEntity.ok(null);
+			}
+			// thumbnail만 불러오고, 나머지 이미지는 상세페이지에서 불러오기
+			imageService.setProductThumbnail(response.getProducts());
+
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 }
