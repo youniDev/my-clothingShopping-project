@@ -127,5 +127,17 @@ public class PurchaseController {
 		}
 	}
 
+	/**
+	 * 사용자의 배송 정보 조회
+	 *
+	 * @param email 사용자 이메일을 나타내는 문자열
+	 * @return 사용자의 배송 정보를 담은 ResponseEntity
+	 */
+	@PostMapping("/fetch/purchaseOrder/shippingStatus")
+	public ResponseEntity<?> fetchShippingStatusByUserid(@RequestBody String email) {
+		email = email.replaceAll("\"", "");
+		List<PurchaseOrderResponseDto> shippingStatus = purchaseRepository.findShippingStatusByUserId(email);
 
+		return ResponseEntity.status(HttpStatus.OK).body(shippingStatus);
+	}
 }

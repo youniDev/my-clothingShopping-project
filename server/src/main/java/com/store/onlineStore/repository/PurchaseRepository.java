@@ -207,4 +207,19 @@ public class PurchaseRepository {
 
 		jdbcTemplate.update(sql, purchase.getProductId(), userId);
 	}
+
+	/**
+	 * 사용자의 배송 상태를 주문 ID를 기준으로 조회
+	 *
+	 * @param userId 배송 상태를 조회할 사용자의 ID
+	 * @return 사용자의 배송 상태를 주문 ID를 기준으로 조회한 결과를 담은 PurchaseOrderResponseDto 객체의 리스트
+	 */
+	public List<PurchaseOrderResponseDto> findShippingStatusByUserId(String userId) {
+		sql = "SELECT DISTINCT po.id as order_id, po.shipping_status, po.purchase_date, po.due_date, po.total_cost\n"
+				+ "FROM purchase_order po\n"
+				+ "JOIN sales s ON po.id = s.order_id \n"
+				+ "WHERE po.user_id = ?";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PurchaseOrderResponseDto.class), userId);
+	}
 }
