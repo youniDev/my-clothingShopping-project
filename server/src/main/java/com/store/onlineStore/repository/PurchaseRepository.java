@@ -260,5 +260,18 @@ public class PurchaseRepository {
 
 		jdbcTemplate.update(sql, userId);
 	}
-}
+
+	/**
+	 * 특정 주문 ID와 제품 ID를 기준으로 판매 ID 조회
+	 *
+	 * @param orderId 주문 ID
+	 * @param productId 제품 ID
+	 * @return 주어진 주문 ID와 제품 ID를 기준으로 조회한 판매 ID
+	 */
+	public String findSalesIdByOrderId(String orderId, String productId) {
+		sql = "SELECT id FROM sales\n"
+				+ "WHERE order_id = ? AND product_id = ?";
+
+		return jdbcTemplate.queryForObject(sql, String.class, orderId, productId);
+	}
 }
