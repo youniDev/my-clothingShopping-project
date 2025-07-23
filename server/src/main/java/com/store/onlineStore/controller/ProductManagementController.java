@@ -178,4 +178,28 @@ public class ProductManagementController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
+
+	/**
+	 * 메인 페이지에 표시할 베스트 및 신제품 정보 조회
+	 */
+	@GetMapping("/product/main")
+	public ResponseEntity<?> getBestItemForMain() throws IOException {
+		List<ProductResponseDto> best = bestProductRepository.findMainBestProducts();
+		List<ProductResponseDto> newest = productRepository.findNewestProducts();
+
+		changedProductThumbnails(best);
+		changedProductThumbnails(newest);
+
+		Map<String, List<ProductResponseDto>> result = Map.of(
+				"bestProducts", best,
+				"newProducts", newest
+		);
+
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
+	// 이미지 변환
+	public void changedProductThumbnails(List<ProductResponseDto> products) throws IOException {
+		imageService.setProductThumbnail(products);
+	}
 }

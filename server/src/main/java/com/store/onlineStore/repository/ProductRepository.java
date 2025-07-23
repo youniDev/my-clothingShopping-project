@@ -150,4 +150,16 @@ public class ProductRepository {
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class));
 	}
 
+	/**
+	 * 신 제품 목록 조회
+	 * @return	제품 목록
+	 */
+	public List<ProductResponseDto> findNewestProducts() {
+		sql = "SELECT * FROM product "
+				+ "ORDER BY created_at, cost "
+				+ "LIMIT " + MAIN_PRODUCT_COUNT;
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class));
+	}
+
 }
