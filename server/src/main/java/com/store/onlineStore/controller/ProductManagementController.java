@@ -202,4 +202,23 @@ public class ProductManagementController {
 	public void changedProductThumbnails(List<ProductResponseDto> products) throws IOException {
 		imageService.setProductThumbnail(products);
 	}
+
+	/**
+	* 카테고리 제품 목록 조회
+	 */
+	@PostMapping("/showProduct/category")
+	public ResponseEntity<?> getProductsInfoByCategory(@RequestBody String category) {
+		try {
+			category = category.replaceAll("\"", "");
+
+			List<ProductResponseDto> products = productRepository.findProductByCategory(category);
+			imageService.setProductThumbnail(products);
+
+			return ResponseEntity.status(HttpStatus.OK).body(products);
+		} catch (NullPointerException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

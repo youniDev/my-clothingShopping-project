@@ -151,7 +151,7 @@ public class ProductRepository {
 	}
 
 	/**
-	 * 신 제품 목록 조회
+	 * 신제품 목록 조회
 	 * @return	제품 목록
 	 */
 	public List<ProductResponseDto> findNewestProducts() {
@@ -160,6 +160,20 @@ public class ProductRepository {
 				+ "LIMIT " + MAIN_PRODUCT_COUNT;
 
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class));
+	}
+
+	/**
+	 * 해당 카테고리에 대한 제품 목록 조회
+	 * @param category	카테고리명
+	 * @return	제품 목록
+	 */
+	public List<ProductResponseDto> findProductByCategory(String category) {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.thumbnail, p.category, p.delivery_availability, DATE_FORMAT(p.created_at, '%Y%m%d') AS createDate \n" +
+				"FROM product p \n" +
+				"LEFT JOIN product_category c ON p.category = c.category_name \n" +
+				"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) AND p.image NOT LIKE 'Nothing%'";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), category, category);
 	}
 
 }
