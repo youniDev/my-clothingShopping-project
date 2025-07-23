@@ -68,4 +68,20 @@ public class PurchaseController {
 		}
 	}
 
+	/**
+	 * 장바구니에 제품을 추가
+	 *
+	 * @param cart 장바구니에 추가할 제품 정보를 담은 CartRequestDto 객체
+	 * @return 제품 추가가 성공하면 true를 반환
+	 */
+	@PostMapping("/cart/product")
+	public ResponseEntity<?> addCartProduct(@RequestBody CartRequestDto cart, @RequestHeader("Authorization") String accessToken) {
+		String userId = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+		cart.setUserId(userId);
+
+		purchaseService.updateCart(cart);	// 장바구니에 제품 정보 업데이트
+
+		return ResponseEntity.status(HttpStatus.OK).body(cart.getUserId());
+	}
+
 }

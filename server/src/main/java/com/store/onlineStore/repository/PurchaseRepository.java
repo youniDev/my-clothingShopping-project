@@ -120,4 +120,65 @@ public class PurchaseRepository {
 		});
 	}
 
+	/**
+	 * 장바구니에 제품을 추가
+	 *
+	 * @param cart 장바구니에 추가할 제품 정보를 담은 객체
+	 *              - productId: 추가할 제품의 ID
+	 *              - quantity: 추가할 제품의 수량
+	 *              - userId: 제품을 추가하는 사용자의 ID
+	 */
+	public void insertCart(CartRequestDto cart) {
+		sql = "INSERT INTO cart (product_id, purchaseQuantity, user_id) " +
+				"VALUES (?, ?, ?)";
+		try {
+			jdbcTemplate.update(
+					sql,
+					cart.getProductId(),
+					cart.getQuantity(),
+					cart.getUserId()
+			);
+		} catch (Exception e) {
+			log.error(e.toString());
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 주어진 사용자와 제품에 대한 장바구니 항목이 존재하는지 여부를 확인
+	 *
+	 * @param cart 장바구니에 존재하는지 확인할 제품 정보를 담은 CartRequestDto 객체
+	 *                - userId: 장바구니에 존재하는지 확인할 사용자의 ID
+	 *                - productId: 장바구니에 존재하는지 확인할 제품의 ID
+	 * @return 장바구니에 해당 제품 존재할 경우 true 반환
+	 */
+	public boolean cartExists(CartRequestDto cart) {
+		sql = "SELECT COUNT(*) > 0 FROM cart WHERE user_id = ? AND product_id = ?";
+
+		return jdbcTemplate.queryForObject(sql, Boolean.class, cart.getUserId(), cart.getProductId());
+	}
+
+	/**
+	 * 장바구니에서 제품의 수량을 업데이트
+	 *
+	 * @param cart 업데이트할 제품의 정보를 담은 CartRequestDto 객체
+	 *                - quantity: 업데이트할 제품의 수량
+	 *                - userId: 제품을 업데이트하는 사용자의 ID
+	 *                - productId: 업데이트할 제품의 ID
+	 */
+	public void updateCartQuantity(CartRequestDto cart) {
+		sql = "UPDATE cart SET purchaseQuantity = purchaseQuantity + ? WHERE user_id = ? AND product_id = ?";
+		try {
+			jdbcTemplate.update(
+					sql,
+					cart.getQuantity(),
+					cart.getUserId(),
+					cart.getProductId()
+			);
+		} catch (Exception e) {
+			log.error(e.toString());
+			throw new RuntimeException(e);
+		}
+	}
+
 }
