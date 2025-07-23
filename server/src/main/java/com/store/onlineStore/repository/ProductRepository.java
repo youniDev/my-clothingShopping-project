@@ -376,4 +376,20 @@ public class ProductRepository {
 	}
 
 
+	/**
+	 * 카테고리에서의 베스트 상품 조회
+	 * @param category	카테고리명
+	 * @return	제품 정보
+	 */
+	public List<ProductResponseDto> findBestItemByCategory(String category) {
+		sql = "SELECT DISTINCT p.id, p.name, p.description, p.category, p.thumbnail, p.delivery_availability, p.createDate AS , p.cost, p.price, p.quantity, " +
+				"COALESCE(SUM(s.purchaseQuantity), 0) AS totalQuantity " +
+				"FROM product p " +
+				"LEFT JOIN sales s ON p.id = s.product_id " +
+				"WHERE p.category = ? " +
+				"GROUP BY p.id, p.name, p.description, p.category, p.image, p.delivery_availability, p.createDate, p.cost, p.price, p.quantity " +
+				"ORDER BY COALESCE(SUM(s.purchaseQuantity), 0) DESC";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), category);
+	}
 }

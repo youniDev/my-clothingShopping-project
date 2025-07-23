@@ -372,4 +372,16 @@ public class ProductManagementController {
 			return ResponseEntity.badRequest().body("error");
 		}
 	}
+	/**
+	 * 카테고리 베스트 상품 조회
+	 *
+	 */
+	@PostMapping("/bestItem/category")
+	public ResponseEntity<?> getBestItemByCategory(@RequestBody String category) {
+		category = category.replaceAll("\"", "");
+
+		List<ProductResponseDto> product = productRepository.findBestItemByCategory(category);
+
+		return ResponseEntity.status(HttpStatus.OK).body(product);
+	}
 }
