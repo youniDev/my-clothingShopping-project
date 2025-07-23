@@ -185,7 +185,6 @@ public class PurchaseRepository {
 	 * 사용자의 장바구니에 담긴 제품 목록을 조회
 	 *
 	 * @param userId 장바구니를 조회할 사용자의 ID
-	 * @return 사용자의 장바구니에 담긴 제품 목록을 담은 CartResponseDto 객체의 리스트
 	 */
 	public List<CartResponseDto> findProductByUserId(String userId) {
 		sql = "SELECT p.name, p.price, p.image, p.category, c.purchaseQuantity, c.product_id " +
@@ -196,5 +195,16 @@ public class PurchaseRepository {
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CartResponseDto.class), userId);
 	}
 
+	/**
+	 * 사용자가 장바구니에서 특정 제품 삭제
+	 *
+	 * @param purchase 삭제할 제품 정보를 담은 CartRequestDto 객체
+	 *                - productId: 삭제할 제품의 ID
+	 *                - userId: 장바구니에서 제품을 삭제하는 사용자의 ID
+	 */
+	public void deleteCartBySales(CartRequestDto purchase, String userId) {
+		sql = "DELETE FROM cart WHERE product_id = ? AND user_id = ?";
 
+		jdbcTemplate.update(sql, purchase.getProductId(), userId);
+	}
 }

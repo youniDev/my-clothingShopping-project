@@ -107,4 +107,25 @@ public class PurchaseController {
 		}
 	}
 
+	/**
+	 * 선택한 제품을 장바구니에서 삭제
+	 *
+	 * @param products 삭제할 제품 정보를 담은 CartRequestDto 리스트
+	 * @return 삭제 작업이 성공하면 true를 반환
+	 */
+	@PostMapping("/cart/delete/product")
+	public ResponseEntity<?> deleteSelectedProduct(@RequestBody List<CartRequestDto> products) {
+		try {
+			for(CartRequestDto product : products) {
+				purchaseRepository.deleteCartBySales(product, product.getUserId());
+			}
+
+			return ResponseEntity.status(HttpStatus.OK).body(true);
+		} catch (Exception e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+	}
+
+
 }
