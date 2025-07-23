@@ -346,5 +346,34 @@ public class ProductRepository {
 		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), productId);
 	}
 
+	/**
+	 *
+	 * best item db 추가 후 주기적 갱신을 위한 카테고리 불러오기
+	 * @return
+	 */
+	// 추가 저장된 카테고리 불러오기
+	public List<String> findCategory() {
+		sql = "SELECT category_name FROM product_category";
+
+		return jdbcTemplate.queryForList(sql, String.class);
+	}
+
+	/**
+	 *
+	 * best item db 추가 후 주기적 갱신을 위한 카테고리별 제품 순위 블러우기
+	 * @param category
+	 * @return
+	 */
+	public List<ProductResponseDto> findBestProductByCategory(String category) {
+		sql = "SELECT p.*, COALESCE(s.purchaseQuantity, 0) AS purchaseQuantity \n"
+				+ "FROM product p \n"
+				+ "LEFT JOIN sales s ON s.product_id = p.id \n"
+				+ "WHERE p.category = ? \n"
+				+ "ORDER BY purchaseQuantity DESC, p.created_at DESC \n"
+				+ "LIMIT 8";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), category);
+	}
+
 
 }

@@ -48,4 +48,33 @@ public class ProductManagementService {
 		return categoryId;
 	}
 
+	/**
+	 * 주기마다 best product db 업데이트
+	 */
+	@Transactional
+	public void updateBestProducts() {
+		try {
+			bestProductRepository.deleteAll();
+
+			List<ProductResponseDto> best = new ArrayList<>();
+			List<String> category = productRepository.findCategory();
+
+			category.forEach(c -> {
+				List<ProductResponseDto> products = productRepository.findBestProductByCategory(c);
+
+				if (products.isEmpty())
+					return;
+
+				best.addAll(products);
+			});
+
+			bestProductRepository.updateAll(best);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
+
+
 }
