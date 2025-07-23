@@ -159,4 +159,23 @@ public class ProductManagementController {
 		List<ProductResponseDto> product = productRepository.selectAll();
 		return ResponseEntity.status(HttpStatus.OK).body(product);
 	}
+
+	/**
+	 * 제품 ID를 기반으로 제품 이미지를 조회
+	 *
+	 * @param productRequestDto 제품 ID를 담은 ProductRequestDto 객체
+	*/
+	@PostMapping("/showProduct/detail/admin")
+	public ResponseEntity<?> getProductImageByProductId(@RequestBody ProductRequestDto productRequestDto) {
+		try {
+			String[] names = productRepository.findProductImagesById(productRequestDto.getId());
+			String[] paths = imageService.getImagesForSendImage(names, "clientPath");
+
+			return ResponseEntity.status(HttpStatus.OK).body(paths);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+	}
 }

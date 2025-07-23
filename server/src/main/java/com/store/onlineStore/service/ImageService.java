@@ -76,6 +76,24 @@ public class ImageService {
 		return null;
 	}
 
+	public String[] getImagesForSendImage(String[] names, String type) {
+		String[] images = new String[names.length];
+
+		int index = 0;
+		for (String name : names) {
+			Image image = new Image(name, IMAGE_PATH);
+
+			if (type.equals("name")) {
+				images[index++] = image.name;
+			}
+			if (type.equals("clientPath")) {
+				images[index++] = image.clientpath;
+			}
+		}
+
+		return images;
+	}
+
 
 	private boolean isEmptyArray(String[] array) {
 		if (array.length == 1 && array[0].equals("[]")) return true;
