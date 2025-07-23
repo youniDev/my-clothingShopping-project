@@ -320,4 +320,37 @@ public class ProductManagementController {
 	}
 
 
+	/**
+	 * 오늘 배송 상품으로 제품의 배송 상태를 업데이트
+	 *
+	 * @param productId 배송 가능한 상태로 변경할 제품의 ID를 담은 문자열 리스트
+	 * @return 배송 상태 업데이트가 성공하면 true를 반환
+	 */
+	@PostMapping("/updateDeliveryStatus/true")
+	public ResponseEntity<?> updateDeliveryStatusForAvailable(@RequestBody List<String> productId) {
+		productId.forEach(i -> {
+			productRepository.updateDeliveryAvailabilityById(i, '1');
+		});
+
+		return ResponseEntity.status(HttpStatus.OK).body(true);
+	}
+
+	/**
+	 * 오늘 배송 불가능한 상품으로 제품의 배송 상태를 업데이트
+	 *
+	 * @param productId 배송 불가능 상태로 변경할 제품의 ID를 담은 문자열 리스트
+	 * @return 배송 상태 업데이트가 성공하면 true를 반환
+	 */
+	@PostMapping("/updateDeliveryStatus/false")
+	public ResponseEntity<?> updateDeliveryStatusForUnavailable(@RequestBody List<String> productId) {
+		char available = '0';
+
+		for (String id : productId) {
+			productRepository.updateDeliveryAvailabilityById(id, available);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(true);
+	}
+
+
 }

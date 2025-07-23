@@ -328,4 +328,16 @@ public class ProductRepository {
 	}
 
 
+	/**
+	 * 오늘 배송 상품으로 등록 여부
+	 * @param productId 제품 id
+	 * @param status	오눌 배송 상품 등록 여부
+	 */
+	public void updateDeliveryAvailabilityById(String productId, char status) {
+		sql = "UPDATE product SET delivery_availability = " + status + " WHERE id = ?";
+
+		jdbcTemplate.update(sql, productId);
+	}
+
+
 }
