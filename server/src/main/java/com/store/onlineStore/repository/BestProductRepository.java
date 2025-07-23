@@ -85,4 +85,12 @@ public class BestProductRepository {
 
 		jdbcTemplate.batchUpdate(sql, batchArgs);
 	}
+
+	public List<ProductResponseDto> findBestProduct() {
+		sql = "SELECT * FROM best_selling_products\n"
+				+ "ORDER BY purchaseQuantity DESC, cost\n"		//판매량 순으로 정렬하고, 동일한 판매량일 경우 원가가 가장 싼 경우로 나열
+				+ "LIMIT " + MAIN_PRODUCT_COUNT;
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class));
+	}
 }
