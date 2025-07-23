@@ -222,4 +222,19 @@ public class PurchaseRepository {
 
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(PurchaseOrderResponseDto.class), userId);
 	}
+
+	/**
+	 * 특정 주문 ID를 기준으로 주문 목록 조회
+	 *
+	 * @param orderId 제품을 조회할 주문의 ID
+	 * @return 주문 ID를 기준으로 조회한 제품 정보를 담은 리스트
+	 */
+	public List<OrderResponseDto> findProductByOrderId(String orderId) {
+		sql = "SELECT s.order_id AS orderId, s.product_id AS productId, s.purchaseQuantity, s.review_id AS reviewId, p.name, p.cost\n"
+				+ "FROM sales s\n"
+				+ "JOIN product p ON p.id = s.product_id\n"
+				+ "WHERE s.order_id = ?";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(OrderResponseDto.class), orderId);
+	}
 }

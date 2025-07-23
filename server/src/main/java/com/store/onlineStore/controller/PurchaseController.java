@@ -49,7 +49,7 @@ public class PurchaseController {
 
 	/**
 	 * 제품 구매 정보 등록
-	 * @param purchases 구매한 제품 정보를 담은 CartRequestDto 리스트
+	 * @param purchases 구매한 제품 정보를 담은 리스트
 	 */
 	@PostMapping("/purchase/product")
 	public ResponseEntity<?> addSellProduct(@RequestBody List<CartRequestDto> purchases, @RequestHeader("Authorization") String accessToken) {
@@ -89,7 +89,6 @@ public class PurchaseController {
 	 * 사용자 ID에 해당하는 제품 목록 조회
 	 *
 	 * @param accessToken 사용자 정보를 담은 토큰
-	 * @return 사용자에게 연관된 제품 목록을 담은 ResponseEntity
 	 */
 	@GetMapping("/fetch/product")
 	public ResponseEntity<?> fetchProductByUserId(@RequestHeader("Authorization") String accessToken) {
@@ -110,8 +109,7 @@ public class PurchaseController {
 	/**
 	 * 선택한 제품을 장바구니에서 삭제
 	 *
-	 * @param products 삭제할 제품 정보를 담은 CartRequestDto 리스트
-	 * @return 삭제 작업이 성공하면 true를 반환
+	 * @param products 삭제할 제품 정보를 담은 리스트
 	 */
 	@PostMapping("/cart/delete/product")
 	public ResponseEntity<?> deleteSelectedProduct(@RequestBody List<CartRequestDto> products) {
@@ -130,8 +128,7 @@ public class PurchaseController {
 	/**
 	 * 사용자의 배송 정보 조회
 	 *
-	 * @param email 사용자 이메일을 나타내는 문자열
-	 * @return 사용자의 배송 정보를 담은 ResponseEntity
+	 * @param email 사용자 이메일
 	 */
 	@PostMapping("/fetch/purchaseOrder/shippingStatus")
 	public ResponseEntity<?> fetchShippingStatusByUserid(@RequestBody String email) {
@@ -139,5 +136,22 @@ public class PurchaseController {
 		List<PurchaseOrderResponseDto> shippingStatus = purchaseRepository.findShippingStatusByUserId(email);
 
 		return ResponseEntity.status(HttpStatus.OK).body(shippingStatus);
+	}
+
+	/**
+	 * 구매 목록 조회
+	 *
+	 * @param orderIds 주문 ID를 담은 문자열 리스트
+
+	 */
+	@PostMapping("/fetch/sales/purchaseProduct")
+	public ResponseEntity<?> fetchPurchaseProductByOrderId(@RequestBody List<String> orderIds) {
+		List<List<OrderResponseDto>> purchaseProduct = new ArrayList<>();
+
+		for (String orderId : orderIds) {
+			purchaseProduct.add(purchaseRepository.findProductByOrderId(orderId));
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(purchaseProduct);
 	}
 }
