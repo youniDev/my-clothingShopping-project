@@ -158,4 +158,22 @@ public class ImageService {
 		product.setThumbnail(getImagesForSendImage(product.getThumbnail(), "clientPath"));
 	}
 
+	// json -> string
+	public String[] getNamesByJson(String jsonString) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			return objectMapper.readValue(jsonString, String[].class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new String[]{};
+		}
+	}
+
+	// 해당 제품의 이미지들 불러오기
+	public void setProductImages(ProductResponseDto product) throws IOException {
+		String[] names = product.getImages();
+
+		product.setImages(getImagesForSendImage(names, "clientPath"));
+	}
+
 }

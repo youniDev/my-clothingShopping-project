@@ -339,5 +339,12 @@ public class ProductRepository {
 		jdbcTemplate.update(sql, productId);
 	}
 
+	// 제품 별 이미지 불러오기
+	public ProductResponseDto findImagesByProductId(String productId) {
+		sql = "SELECT image FROM product WHERE id = ?";
+
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), productId);
+	}
+
 
 }

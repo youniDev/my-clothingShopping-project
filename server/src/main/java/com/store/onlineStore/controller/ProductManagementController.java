@@ -353,4 +353,23 @@ public class ProductManagementController {
 	}
 
 
+	/**
+	 * 제품 상세 페이지에서 해당 제품에 맞는 이미지 불러오기
+	 * @param productId
+	 * @return
+	 */
+	@PostMapping("/fetch/product/image/productId")
+	public ResponseEntity<?> getImageByProductId (@RequestBody String productId) {
+		try {
+			productId = productId.replaceAll("\"", "");
+			ProductResponseDto product = productRepository.findImagesByProductId(productId);
+
+			product.setImages(imageService.getNamesByJson(product.getImage()));
+			imageService.setProductImages(product);
+			return ResponseEntity.ok(product);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("error");
+		}
+	}
 }
