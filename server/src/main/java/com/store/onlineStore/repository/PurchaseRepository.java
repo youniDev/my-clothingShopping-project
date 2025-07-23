@@ -181,4 +181,20 @@ public class PurchaseRepository {
 		}
 	}
 
+	/**
+	 * 사용자의 장바구니에 담긴 제품 목록을 조회
+	 *
+	 * @param userId 장바구니를 조회할 사용자의 ID
+	 * @return 사용자의 장바구니에 담긴 제품 목록을 담은 CartResponseDto 객체의 리스트
+	 */
+	public List<CartResponseDto> findProductByUserId(String userId) {
+		sql = "SELECT p.name, p.price, p.image, p.category, c.purchaseQuantity, c.product_id " +
+				"FROM cart c " +
+				"JOIN product p ON c.product_id = p.id " +
+				"WHERE c.user_id = ?";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(CartResponseDto.class), userId);
+	}
+
+
 }

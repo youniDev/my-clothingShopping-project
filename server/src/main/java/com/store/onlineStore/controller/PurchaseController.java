@@ -84,4 +84,27 @@ public class PurchaseController {
 		return ResponseEntity.status(HttpStatus.OK).body(cart.getUserId());
 	}
 
+	/**
+	 * 장바구니 목록 조회
+	 * 사용자 ID에 해당하는 제품 목록 조회
+	 *
+	 * @param accessToken 사용자 정보를 담은 토큰
+	 * @return 사용자에게 연관된 제품 목록을 담은 ResponseEntity
+	 */
+	@GetMapping("/fetch/product")
+	public ResponseEntity<?> fetchProductByUserId(@RequestHeader("Authorization") String accessToken) {
+		try {
+			String userId = this.tokenProvider.getUserIdFromToken(accessToken.substring(7));
+			List<CartResponseDto> products= purchaseRepository.findProductByUserId(userId);
+
+			return ResponseEntity.status(HttpStatus.OK).body(products);
+		} catch (Exception e) {
+			if (accessToken.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK).body("UNAUTHORIZED");	// 토큰이 없는 경우
+			}
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+		}
+	}
+
 }
