@@ -384,4 +384,24 @@ public class ProductManagementController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(product);
 	}
+
+	/**
+	 * 제품을 구매 수량 순으로 정렬하여 반환
+	 *
+	 */
+	@PostMapping("/sort/product/quantity")
+	public ResponseEntity<?> sortProductOrderByQuantity(@RequestBody List<String> productId) {
+		try {
+			// 아무것도 검색되지 않는 경우
+			if (productId == null || productId.size() == 0) {
+				return ResponseEntity.status(HttpStatus.OK).body(null);
+			}
+
+			List<CartRequestDto> sortedProduct = purchaseRepository.findProductOrderByQuantity(productId);
+
+			return ResponseEntity.status(HttpStatus.OK).body(sortedProduct);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+		}
+	}
 }
