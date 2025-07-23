@@ -148,4 +148,15 @@ public class ProductManagementController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(productRepository.findAllById(id));
 	}
+
+	/**
+	 * 관리자가 제품 관리를 위해 모든 제품을 조회
+	 *
+	 * @return 모든 제품 정보를 담은 ResponseEntity
+	 */
+	@GetMapping("/showProduct/admin")
+	public ResponseEntity<?> getAllProducts() {
+		List<ProductResponseDto> product = productRepository.selectAll();
+		return ResponseEntity.status(HttpStatus.OK).body(product);
+	}
 }

@@ -137,4 +137,17 @@ public class ProductRepository {
 		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 
+	/**
+	 * 등록된 모든 제품 정보 조회
+	 * @return	제품 정보
+	 */
+	public List<ProductResponseDto> selectAll() {
+		sql = "SELECT p.id, p.name, p.description, p.cost, p.price, p.quantity, p.category, p.delivery_availability, \n"
+				+ "  DATE_FORMAT(p.created_at, '%Y%m%d') AS createDate, \n"
+				+ "  COALESCE(s.total_purchase_quantity, 0) AS purchaseQuantity\n"
+				+ "FROM product p\n"
+				+ "LEFT JOIN product_sales_summary s ON s.product_id = p.id";
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class));
+	}
+
 }
