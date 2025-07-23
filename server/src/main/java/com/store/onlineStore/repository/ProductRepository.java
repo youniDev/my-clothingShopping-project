@@ -313,4 +313,19 @@ public class ProductRepository {
 		return new PaginationResponseDto(products, nextCursor, totalPage);
 	}
 
+	/**
+	 * 해당 카테고리에 있는 제품 수 조회
+	 * @param category	카테고리명
+	 * @return	제품 수
+	 */
+	public long countProductsByCategory(String category) {
+		String sql = "SELECT COUNT(*) FROM product p " +
+				"LEFT JOIN product_category c ON p.category = c.category_name " +
+				"WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?) " +
+				"AND p.image NOT LIKE 'Nothing%'";
+
+		return jdbcTemplate.queryForObject(sql, Long.class, category, category);
+	}
+
+
 }

@@ -303,4 +303,21 @@ public class ProductManagementController {
 		}
 	}
 
+	// 특정 카테고리 베스트 아이템 조회
+	@GetMapping("/best/category")
+	public ResponseEntity<?> getBestProductsByCategory (@RequestParam String category) throws IOException {
+		category = category.replaceAll("\"", "");
+
+		List<ProductResponseDto> best = bestProductRepository.findBestProductByCategory(category);
+		imageService.setProductThumbnail(best);
+
+		long totalProducts = productRepository.countProductsByCategory(category);	// 해당 카테고리에 대한 제품 수
+		long page = (int)Math.ceil((double) totalProducts / PRODUCT_PAGE);
+
+		PaginationResponseDto pages = new PaginationResponseDto(best, null, page);
+
+		return ResponseEntity.ok(pages);
+	}
+
+
 }

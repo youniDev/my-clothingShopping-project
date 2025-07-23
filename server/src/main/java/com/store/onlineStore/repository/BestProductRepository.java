@@ -21,8 +21,6 @@ public class BestProductRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	
-
 	// 메인에 보여줄 베스트 아이템 조회
 	public List<ProductResponseDto> findMainBestProducts() {
 		sql = "SELECT bsp.id, bsp.name, bsp.description, bsp.cost, bsp.price, bsp.quantity, bsp.category, bsp.thumbnail\n"
@@ -32,5 +30,16 @@ public class BestProductRepository {
 
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class));
 	}
+
+	// 카테고리 별 베스트 아이템 조회
+	public List<ProductResponseDto> findBestProductByCategory(String category) {
+		sql = "SELECT bsp.id, bsp.name, bsp.description, bsp.cost, bsp.price, bsp.quantity, bsp.category, bsp.thumbnail\n"
+				+ "FROM best_selling_products bsp\n"
+				+ "LEFT JOIN product_category c ON bsp.category = c.category_name\n"
+				+ "WHERE (c.category_name = ? OR COALESCE(c.main_category_name, c.category_name) = ?)";
+
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductResponseDto.class), category, category);
+	}
+
 
 }
