@@ -176,4 +176,24 @@ public class ImageService {
 		product.setImages(getImagesForSendImage(names, "clientPath"));
 	}
 
+	// 새로 등록할 이미지의 이름을 얻는 함수
+	private String[] getImagesNamesByFiles(MultipartFile[] files, File directory) {
+		String[] name = new String[files.length];
+
+		int index = 0;
+		for (MultipartFile file : files) {
+			Image image = new Image(file, directory, IMAGE_PATH);
+
+			name[index++] = image.name;
+		}
+
+		return name;
+	}
+
+	public void setProductImages(List<ProductResponseDto> products) throws IOException{
+		for (ProductResponseDto product : products) {
+			setProductImages(product);
+		}
+	}
+
 }
