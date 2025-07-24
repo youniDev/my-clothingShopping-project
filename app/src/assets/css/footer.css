@@ -1,0 +1,9 @@
+.footer-bg-custom {
+  background-color: #1f1f1f;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.footer-custom a:hover {
+  color: #eeeeee;
+}

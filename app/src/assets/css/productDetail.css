@@ -1,0 +1,103 @@
+.detail-container {
+  margin-top: 8rem;
+}
+
+.submit-btn > button:disabled {
+  border: 1px solid #eb4545;
+  background-color: #f73636c5;
+}
+
+/* Extra Small 화면에 대한 스타일 */
+@media (max-width: 576px) {
+  .custom-resizing-container {
+    /* Extra Small 화면에 대한 스타일 설정 */
+    margin-top: 2.5rem;
+  }
+  .custom-resizing-sub {
+    display: none;
+  }
+
+  .custom-resizing-main-image {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+}
+
+/* Small 화면에 대한 스타일 */
+@media (min-width: 577px) and (max-width: 768px) {
+  .custom-resizing-container {
+    /* Extra Small 화면에 대한 스타일 설정 */
+    margin-top: 2.5rem;
+  }
+  .custom-resizing-sub {
+    display: none;
+  }
+  .custom-resizing-main-image {
+    width: 550px;
+    height: 550px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+}
+
+/* Medium 화면에 대한 스타일 */
+@media (min-width: 769px) and (max-width: 992px) {
+  .custom-resizing-sub-image {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin-left: 0rem;
+    margin-top: 3.5rem;
+  }
+  .custom-resizing-main-image {
+    width: 550px;
+    height: 550px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+}
+
+/* Large 화면에 대한 스타일 */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .custom-resizing-sub-image {
+    max-width: 5%;
+    max-height: 5%;
+    display: block;
+    margin-left: 0rem;
+    margin-top: 3.5rem;
+  }
+  .custom-resizing-main-image {
+    width: 550px;
+    height: 550px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  .custom-resizing-info {
+    margin-top: 10rem;
+    margin-right: -5rem;
+  }
+}
+
+/* Extra Large 화면에 대한 스타일 */
+
+@media (min-width: 1201px) and (max-width: 1363) {
+  .custom-resizing-sub-image {
+    max-width: 5%;
+    max-height: 5%;
+    display: block;
+    margin-left: 0rem;
+    margin-top: 3.5rem;
+  }
+  .custom-resizing-main-image {
+    width: 550px;
+    height: 550px;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  .custom-resizing-info {
+    margin-top: 10rem;
+    margin-left: -10%;
+  }
+}

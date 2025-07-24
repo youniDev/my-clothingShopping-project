@@ -1,0 +1,11 @@
+.uploaded-image-container {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.uploaded-image-container:hover {
+  transform: scale(1.05);
+}
+.uploaded-image {
+  transition: all 0.3s ease;
+}

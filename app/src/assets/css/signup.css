@@ -1,0 +1,115 @@
+.rm-10 {
+  margin-top: 10rem;
+}
+h3 {
+  font-weight: 800;
+}
+
+button,
+.btn {
+  background-color: rgb(20, 20, 20);
+  border-color: rgb(20, 20, 20);
+}
+
+button,
+.btn:hover {
+  background-color: rgb(97, 97, 97);
+  border-color: #fff;
+}
+
+button,
+.btn:active {
+  background-color: rgb(112, 111, 111);
+  border-color: #fff;
+}
+.btn-close {
+  background-color: #fff !important;
+}
+.container div {
+  margin-top: 0.2rem;
+}
+
+.custom-btn-submit {
+  margin-top: 3.5rem;
+}
+
+.input-group-append {
+  cursor: pointer;
+}
+
+form > h5 {
+  margin-top: 3rem;
+  font-weight: 600;
+}
+
+.basic-info-container-custom > h5 {
+  margin-top: 3rem;
+  font-weight: 600;
+}
+
+.text-necessary {
+  margin-top: 3rem;
+  padding-left: 4rem;
+  color: #67676a;
+}
+
+.text-basic-info-custom::after {
+  content: "*";
+  color: #289ad7;
+}
+
+.label-basic-info-custom::after {
+  content: "*";
+  color: #289ad7;
+}
+
+.text-necessary::before {
+  content: "*";
+  color: #289ad7;
+}
+
+form > hr {
+  margin-bottom: 1rem;
+  border-width: 0.1rem;
+  color: #6c6b6b;
+}
+
+.text-event {
+  color: rgb(153, 40, 147);
+  font-weight: 300;
+  text-shadow:
+    0 0 10px #bdd452,
+    0 0 20px #dda201,
+    0 0 30px #8f4b3a,
+    0 0 40px #ff0141; /* 그림자 효과 설정 */
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.modal-btn-custom {
+  width: 80%;
+  padding: 1.5rem;
+  font-size: 17px;
+  border-color: #b8b6b6;
+}
+
+.icon-space {
+  padding-right: 1rem;
+}
+.btn-space {
+  margin-bottom: 1rem;
+}
+
+.blinking-text {
+  animation: blink 1s infinite; /* 1초 동안 애니메이션 실행, 무한 반복 */
+}

@@ -1,0 +1,17 @@
+.insert-button {
+  background-color: rgb(255, 255, 255);
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+}
+.white-button:hover {
+  background-color: #f0f8ff;
+}
+
+.delete-button {
+  background-color: rgb(255, 255, 255);
+  color: #d32929;
+  border: 1px solid #d32929;
+}
+.delete-button:hover {
+  background-color: #f0f8ff;
+}

@@ -1,0 +1,39 @@
+a {
+  text-decoration: none;
+  color: rgb(88, 88, 88);
+}
+
+.background-color-custom {
+  background-color: #fff !important;
+}
+
+.navbar-brand {
+  margin-left: 2rem;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.navbar-appeal {
+  font-weight: 1000;
+}
+
+.nav-space {
+  margin-right: 2rem;
+}
+
+/*
+.nav-link {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  border-radius: 0;
+}
+
+*/

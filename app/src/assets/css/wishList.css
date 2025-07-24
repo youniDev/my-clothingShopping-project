@@ -1,0 +1,59 @@
+.wishlist-card {
+  position: relative;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.wishlist-card:hover {
+  transform: scale(1.03);
+}
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.wishlist-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+  transition: transform 0.3s ease;
+}
+
+.wishlist-card:hover .wishlist-image {
+  transform: scale(1.1);
+}
+
+.heart-overlay {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 1.2rem;
+  color: #ff4d4d;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 4px 6px;
+  border-radius: 50%;
+}
+
+.wishlist-info {
+  padding: 10px;
+  text-align: center;
+}
+
+.wishlist-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wishlist-price {
+  font-size: 0.85rem;
+  color: #888;
+}

@@ -1,0 +1,159 @@
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none; /* 불필요한 * 표시 제거 */
+  padding-left: 0; /* 들여쓰기 제거 */
+}
+
+.best-item-list-custom {
+  background-color: #f9f9f9;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-top: 10rem;
+}
+
+/* swiper 슬라이드 이미지 스타일 */
+.swiper-best-item-img {
+  border-radius: 16px;
+  width: 320px;
+  height: 440px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.swiper-best-item-img:hover {
+  transform: scale(1.05);
+}
+
+.cute-card {
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(84, 128, 91, 0.2);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+}
+
+.cute-card:hover {
+  box-shadow: 0 8px 22px rgba(245, 0, 87, 0.4);
+  transform: translateY(-6px);
+}
+
+/* 이미지 컨테이너 */
+.img-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* 이미지 위에 텍스트 오버레이 */
+.text-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  color: #333;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.text-overlay ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.text-overlay ul li {
+  margin-bottom: 4px;
+}
+
+.text-overlay .item-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: #b34071;
+  margin-bottom: 0.3rem;
+}
+
+/* 할인 금액 강조 */
+.text-overlay li span {
+  color: #a12f2f;
+}
+
+.text-overlay li .displaynone {
+  display: none; /* 필요시 보이도록 조정 가능 */
+}
+
+/* Best Item 제목 스타일 */
+.best-item-custom h5 {
+  font-weight: 700;
+  color: #b34071;
+  margin-bottom: 1.5rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 카테고리 내비게이션 */
+.category-nav {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.notice-title-custom {
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar-notice-custom {
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+}
+
+.navbar-notice-custom .nav-link {
+  color: #666;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.navbar-notice-custom .nav-link:hover,
+.navbar-notice-custom .nav-link:focus,
+.navbar-notice-custom .nav-link.active,
+.navbar-notice-custom .nav-link[aria-current="page"] {
+  background-color: #b34071;
+  color: white;
+}
+
+/* 정렬 옵션 네비게이션 */
+.sorting-option-nav .nav-link {
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+}
+
+.sorting-option-nav .nav-link:hover {
+  color: #816e77;
+  text-decoration: underline;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+  .swiper-best-item-img {
+    width: 240px;
+    height: 330px;
+  }
+}

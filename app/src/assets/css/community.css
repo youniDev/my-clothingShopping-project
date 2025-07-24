@@ -1,0 +1,83 @@
+.container {
+  margin-top: 6rem;
+}
+
+.nav-space {
+  margin-left: 1rem;
+}
+
+.notice-title-custom {
+  font-weight: 600;
+  margin-bottom: 3rem;
+}
+
+.navbar-notice-custom {
+  margin-bottom: 3rem;
+}
+
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+}
+
+* {
+  outline: none;
+}
+
+.table th,
+.table thead th {
+  font-weight: 500;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ffffff;
+}
+
+.table th {
+  vertical-align: top;
+  border-bottom: 1px solid #dbdfe2;
+}
+
+.customtable th {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.customtable td {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.table th,
+.table thead th {
+  font-weight: 500;
+}
+
+th {
+  text-align: inherit;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
+}
+
+.table > thead {
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.table th:first-child,
+.table td:first-child {
+  text-align: left; /* 첫 번째 열(번호)은 왼쪽 정렬 */
+  padding-left: 2rem;
+}
+
+.table th:last-child,
+.table td:last-child {
+  text-align: right; /* 마지막 열(작성자)은 오른쪽 정렬 */
+  padding-right: 2rem;
+}

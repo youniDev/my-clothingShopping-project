@@ -1,0 +1,64 @@
+/* 전체 랩 스타일 */
+.slider-wrap {
+  position: relative;
+  padding-bottom: 70px;
+  overflow: hidden;
+}
+
+.slick-slide {
+  display: inline-block;
+}
+
+/* Pagination (슬라이드 하단 점) */
+.slick-dots.slick-thumb {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  transform: translateX(-50%);
+}
+
+.slick-dots.slick-thumb li {
+  position: relative;
+  display: inline-block;
+}
+
+.slick-dots.slick-thumb li.slick-active span {
+  filter: none;
+}
+
+/* 슬라이드 아이템 스타일 */
+.slick-items {
+  width: 100%;
+  height: 400px;
+  text-align: center;
+}
+
+.slick-items img {
+  max-width: 100%;
+  height: 100%;
+  vertical-align: top;
+}
+
+/* 커스텀 페이징 스타일 */
+.paging-anchor {
+  display: block;
+  width: 50px;
+  height: 50px;
+}
+
+.paging-anchor img {
+  width: 100%;
+  height: 100%;
+}
+
+.paging {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  background-size: 100% 100%;
+  filter: grayscale(1);
+}

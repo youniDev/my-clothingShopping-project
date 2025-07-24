@@ -1,0 +1,163 @@
+.container {
+  margin-top: -1rem;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Kaushan Script", cursive;
+}
+
+.myform {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 1rem;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  outline: 0;
+  max-width: 500px;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+}
+
+input::-webkit-input-placeholder {
+  color: #aaa;
+  font-style: italic;
+  font-size: 13px;
+}
+input:-ms-input-placeholder {
+  color: #aaa;
+  font-style: italic;
+  font-size: 13px;
+}
+textarea::-webkit-input-placeholder {
+  color: #aaa;
+  font-weight: bold;
+  font-size: 13px;
+}
+textarea:-ms-input-placeholder {
+  color: #aaa;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.tx-tfm {
+  text-transform: uppercase;
+}
+
+.form-custom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text-remember {
+  margin-bottom: 0.5rem;
+  color: #868383;
+  font-size: 15px;
+}
+
+.find-account a {
+  color: #868383;
+  font-size: 15px;
+}
+
+.mybtn {
+  background-color: #fff;
+  width: 100%;
+  border: 1px solid lightgrey;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+.login-or {
+  position: relative;
+  color: #9f9e9e;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.span-or {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  margin-left: -25px;
+  background-color: #fff;
+  width: 50px;
+  text-align: center;
+}
+
+.hr-or {
+  height: 1px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.google {
+  background-color: #4267b2 !important;
+  color: #f9f8fd;
+  font-size: 15px;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  outline: none;
+  border: 1px solid lightgrey !important;
+}
+
+.bi-google {
+  margin-right: 1px;
+}
+
+.login-naver {
+  background-image: none;
+}
+
+.naver {
+  background-color: #26c826 !important;
+  color: #f9f8fd;
+  font-size: 15px;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  outline: none;
+  border: 1px solid lightgrey !important;
+}
+
+.bi-naver {
+  margin-right: 1px;
+}
+
+.kakao {
+  background-color: #ffeb00 !important;
+  color: #615516;
+  font-size: 15px;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  outline: none;
+  border: 1px solid lightgrey !important;
+}
+
+.bi-kakao {
+  margin-right: 1px;
+}
+
+form .error {
+  color: #ff0000;
+}
+
+#second {
+  display: none;
+}
